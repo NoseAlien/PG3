@@ -16,6 +16,7 @@ typedef struct cell
 	struct cell* next;
 }CELL;
 
+CELL* getInsertCellAddress(CELL* endCELL, int iterator);
 void create(CELL* begin, rentalInfo val);
 void index(CELL* begin);
 void indexBack(CELL* begin);
@@ -38,50 +39,48 @@ int main()
 	return 0;
 }
 
-void create(CELL* begin, rentalInfo val)
+CELL* getInsertCellAddress(CELL* endCELL, int iterator)
+{
+	for (int i = 0; i < iterator; i++)
+	{
+		if (endCELL->next)
+		{
+			endCELL = endCELL->next;
+		}
+		else
+		{
+			break;
+		}
+	}
+	return endCELL;
+}
+
+void create(CELL* currentCell, rentalInfo val)
 {
 	CELL* newCell;
 	newCell = (CELL*)malloc(sizeof(CELL));
 
 	strcpy_s(newCell->val.name, 64, val.name);
 	newCell->val = val;
-	newCell->prev = nullptr;
-	newCell->next = nullptr;
+	newCell->prev = currentCell;
+	newCell->next = currentCell->next;
 
-	CELL* targetCell = begin;
-
-	while (targetCell->next != nullptr)
+	if (currentCell->next)
 	{
-		targetCell = targetCell->next;
+		CELL* nextCell = currentCell->next;
+		nextCell->prev = newCell;
 	}
 
-	targetCell->next = newCell;
-	newCell->prev = targetCell;
+	currentCell->next = newCell;
 }
 
-void index(CELL* begin)
+void index(CELL* endCell)
 {
-	CELL* targetCell = begin;
-
-	while (targetCell->next != nullptr)
+	int no = 1;
+	while (endCell->next != nullptr)
 	{
-		targetCell = targetCell->next;
-		printf("%s\n%d\n%d\n\n",targetCell->val.name, targetCell->val.rentDate, targetCell->val.returnDate);
-	}
-}
-
-void indexBack(CELL* begin)
-{
-	CELL* targetCell = begin;
-
-	while (targetCell->next != nullptr)
-	{
-		targetCell = targetCell->next;
-	}
-
-	while (targetCell->prev != nullptr)
-	{
-		printf("%s\n%d\n%d\n\n", targetCell->val.name, targetCell->val.rentDate, targetCell->val.returnDate);
-		targetCell = targetCell->prev;
+		endCell = endCell->next;
+		//printf("%s\n%d\n%d\n\n",targetCell->val.name, targetCell->val.rentDate, targetCell->val.returnDate);
+		no++;
 	}
 }
