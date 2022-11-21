@@ -19,7 +19,6 @@ typedef struct cell
 CELL* getInsertCellAddress(CELL* endCELL, int iterator);
 void create(CELL* begin, rentalInfo val);
 void index(CELL* begin);
-void indexBack(CELL* begin);
 
 int main()
 {
@@ -33,8 +32,6 @@ int main()
 	create(&head, { "‚È‚Õ‚è",20220906,20220907 });
 
 	index(&head);
-
-	indexBack(&head);
 
 	return 0;
 }
@@ -80,7 +77,7 @@ void index(CELL* endCell)
 	while (endCell->next != nullptr)
 	{
 		endCell = endCell->next;
-		//printf("%s\n%d\n%d\n\n",targetCell->val.name, targetCell->val.rentDate, targetCell->val.returnDate);
+		printf("%s\n%d\n%d\n\n", endCell->val.name, endCell->val.rentDate, endCell->val.returnDate);
 		no++;
 	}
 }
