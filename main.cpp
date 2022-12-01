@@ -1,7 +1,8 @@
 #include <stdio.h>
-#include <stdlib.h>
-#include <string.h>
-#include <algorithm>
+#include <iostream>
+#include <string>
+
+using namespace std;
 
 typedef struct cell
 {
@@ -34,7 +35,7 @@ int main()
 		switch (selectedControl)
 		{
 		default:
-			printf("[要素の操作]\n1. 要素の表示\n2. 要素の挿入\n");
+			printf("\n[要素の操作]\n1. 要素の表示\n2. 要素の挿入\n");
 			if (GetSize(&head) > 0)
 			{
 				printf("3. 要素の編集\n4. 要素の削除\n5. 要素の並び替え(オプション)\n");
@@ -45,12 +46,12 @@ int main()
 			break;
 
 		case 1:
-			printf("[要素の表示]\n1. 要素の一覧表示\n2. 順番を指定して要素を表示\n9. 要素選択に戻る\n\n操作を選択してください\n");
+			printf("\n[要素の表示]\n1. 要素の一覧表示\n2. 順番を指定して要素を表示\n9. 要素選択に戻る\n\n操作を選択してください\n");
 			scanf_s("%d", &inputValue);
 			switch (inputValue)
 			{
 			case 1:
-				printf("[要素の一覧表示]\n要素一覧: {\n");
+				printf("\n[要素の一覧表示]\n要素一覧: {\n");
 				index(&head);
 				printf("}\n\n要素数: %d\n", GetSize(&head));
 				StatingMenu();
@@ -62,11 +63,17 @@ int main()
 				break;
 
 			case 2:
-				printf("[順番を指定して要素を表示]\n表示したい要素の順番を指定ください。\n");
+				printf("\n[順番を指定して要素を表示]\n表示したい要素の順番を指定ください。\n");
 				scanf_s("%d", &inputValue);
 
-				inputValue = std::max(std::min(inputValue, GetSize(&head) - 1), 0);
-				printf("%d: %s\n\n", inputValue, getInsertCellAddress(&head, inputValue + 1)->val);
+				if (GetSize(&head) > inputValue && inputValue >= 0)
+				{
+					printf("\n%d: %s\n\n", inputValue, getInsertCellAddress(&head, inputValue + 1)->val);
+				}
+				else
+				{
+					printf("\n%d番目の要素が見つかりませんでした。\n", inputValue);
+				}
 				StatingMenu();
 				scanf_s("%d", &inputValue);
 				if (inputValue == 2)
@@ -85,15 +92,29 @@ int main()
 			int itr;
 			char val[64];
 
-			printf("[要素の挿入]\n要素を追加する場所を指定してください。\n");
-			scanf_s("%d", &itr);
-			itr = std::max(0, itr);
+			string getSelect;
+			printf("\n[要素の挿入]\n要素を追加する場所を指定してください。最後尾に追加する場合は何も入力しないでください。\n");
 
-			printf("追加する要素の値を入力してください。\n");
+			cin.clear();
+			cin.ignore(1024, '\n');
+			getline(cin, getSelect);
+
+			if (getSelect == "")
+			{
+				itr = GetSize(&head);
+			}
+			else
+			{
+				itr = stoi(getSelect);
+			}
+
+			itr = max(min(itr, GetSize(&head)), 0);
+
+			printf("\n追加する要素の値を入力してください。\n");
 			scanf_s("%s", val, 64);
 
 			create(getInsertCellAddress(&head, itr), val);
-			printf("要素\"%s\"が%d番目に挿入されました。\n", val, itr);
+			printf("\n要素\"%s\"が%d番目に挿入されました。\n", val, itr);
 		}
 		selectedControl = 0;
 		break;
@@ -104,20 +125,20 @@ int main()
 				int itr;
 				char val[64];
 
-				printf("[要素の編集]\n編集したい要素の番号を指定してください。\n");
+				printf("\n[要素の編集]\n編集したい要素の番号を指定してください。\n");
 				scanf_s("%d", &itr);
-				itr = std::max(0, itr);
+				itr = max(0, itr);
 				if (GetSize(&head) > itr)
 				{
-					printf("%d番目の要素の変更する値を入力してください。\n", itr);
+					printf("\n%d番目の要素の変更する値を入力してください。\n", itr);
 					scanf_s("%s", val, 64);
 
 					replace(getInsertCellAddress(&head, itr + 1), val);
-					printf("%d番目の要素の値が\"%s\"に変更されました。\n", itr, val);
+					printf("\n%d番目の要素の値が\"%s\"に変更されました。\n", itr, val);
 				}
 				else
 				{
-					printf("%d番目の要素が見つかりませんでした。\n", itr);
+					printf("\n%d番目の要素が見つかりませんでした。\n", itr);
 				}
 			}
 			selectedControl = 0;
@@ -128,17 +149,17 @@ int main()
 			{
 				int itr;
 
-				printf("[要素の削除]\n削除したい要素の番号を指定してください。\n");
+				printf("\n[要素の削除]\n削除したい要素の番号を指定してください。\n");
 				scanf_s("%d", &itr);
-				itr = std::max(0, itr);
+				itr = max(0, itr);
 				if (GetSize(&head) > itr)
 				{
 					erase(getInsertCellAddress(&head, itr + 1));
-					printf("%d番目の要素を削除しました。\n", itr);
+					printf("\n%d番目の要素を削除しました。\n", itr);
 				}
 				else
 				{
-					printf("%d番目の要素が見つかりませんでした。\n", itr);
+					printf("\n%d番目の要素が見つかりませんでした。\n", itr);
 				}
 			}
 			selectedControl = 0;
@@ -150,27 +171,27 @@ int main()
 				int itr;
 				int itr2;
 
-				printf("[要素の並び替え]\n入れ替える一方の要素の番号を指定してください。\n");
+				printf("\n[要素の並び替え]\n入れ替える一方の要素の番号を指定してください。\n");
 				scanf_s("%d", &itr);
-				itr = std::max(0, itr);
+				itr = max(0, itr);
 				if (GetSize(&head) > itr)
 				{
-					printf("%d番目の要素と入れ替える要素の番号を指定してください。\n", itr);
+					printf("\n%d番目の要素と入れ替える要素の番号を指定してください。\n", itr);
 					scanf_s("%d", &itr2);
-					itr2 = std::max(0, itr2);
+					itr2 = max(0, itr2);
 					if (GetSize(&head) > itr2)
 					{
 						swap(getInsertCellAddress(&head, itr + 1), getInsertCellAddress(&head, itr2 + 1));
-						printf("%d番目の要素と%d番目の要素を入れ替えました。\n", itr, itr2);
+						printf("\n%d番目の要素と%d番目の要素を入れ替えました。\n", itr, itr2);
 					}
 					else
 					{
-						printf("%d番目の要素が見つかりませんでした。\n", itr2);
+						printf("\n%d番目の要素が見つかりませんでした。\n", itr2);
 					}
 				}
 				else
 				{
-					printf("%d番目の要素が見つかりませんでした。\n", itr);
+					printf("\n%d番目の要素が見つかりませんでした。\n", itr);
 				}
 			}
 			selectedControl = 0;
