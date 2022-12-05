@@ -1,58 +1,33 @@
 #include <stdio.h>
-#include <list>
-#include <vector>
+
+unsigned int RecursiveHourlyWage(unsigned int hour)
+{
+	if (hour <= 1)
+	{
+		return 100 * hour;
+	}
+
+	int wage = 0;
+
+	return (wage + ((RecursiveHourlyWage(hour - 1) * 2 - 50)));
+}
+
+unsigned int RecursiveWage(unsigned int hour)
+{
+	int ret = 0;
+	for (int i = 0; i <= hour; i++)
+	{
+		ret += RecursiveHourlyWage(i);
+	}
+
+	return ret;
+}
 
 int main()
 {
-	std::list<const char*> yamanoteLine
-	{
-		"Tokyo","Kanda","Akihabara","Okachimachi",
-		"Ueno","Uguisudani","Nippori","Tabata","Komagome",
-		"Sugamo","O-tsuka","Ikebukuro","Mejiro","Takadanobaba",
-		"Shin_O-kubo","Shinjuku","Yoyogi","Harajuku",
-		"Shibuya","Ebisu","Meguro","Gotanda","O-saki",
-		"Shinagawa","Tamachi","Hamamatsucho-","Shinbashi",
-		"Yurakucho-"
-	};
+	const int hour = 8;
 
-	printf("1970\n");
-	for (const auto& station : yamanoteLine)
-	{
-		printf("%s, ", station);
-	}
-	printf("\n\n");
-
-	for (std::list<const char*>::iterator itr = yamanoteLine.begin(); itr != yamanoteLine.end(); ++itr)
-	{
-		if (*itr == "Tabata")
-		{
-			itr = yamanoteLine.insert(itr, "Nishi_Nippori");
-			itr++;
-		}
-	}
-
-	printf("2019\n");
-	for (const auto& station : yamanoteLine)
-	{
-		printf("%s, ", station);
-	}
-	printf("\n\n");
-
-	for (std::list<const char*>::iterator itr = yamanoteLine.begin(); itr != yamanoteLine.end(); ++itr)
-	{
-		if (*itr == "Tamachi")
-		{
-			itr = yamanoteLine.insert(itr, "Takanawa_Gateway");
-			itr++;
-		}
-	}
-
-	printf("2022\n");
-	for (const auto& station : yamanoteLine)
-	{
-		printf("%s, ", station);
-	}
-	printf("\n\n");
-
+	printf("àÍî í¿ã‡ : %d\n", 1072 * hour);
+	printf("çƒãAí¿ã‡ : %d\n", RecursiveWage(hour));
 	return 0;
 }
