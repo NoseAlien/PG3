@@ -11,6 +11,7 @@ void Enemy::Update()
 	}
 
 	(this->*actionTable[static_cast<size_t>(phase)])();
+	phase = static_cast<phaseSet>(phase + 1);
 }
 
 void Enemy::Defeat()
@@ -44,4 +45,5 @@ void Enemy::Shoot()
 void Enemy::Escape()
 {
 	printf("“G‚ª“¦‚°‚½I\n");
+	deleteFlag = true;
 }

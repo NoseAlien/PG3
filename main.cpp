@@ -1,5 +1,6 @@
 #include <vector>
-#include <stdio.h>
+#include <iostream>
+#include <string>
 #include "Enemy.h"
 
 using namespace std;
@@ -7,13 +8,16 @@ using namespace std;
 int main()
 {
 	vector<Enemy> enemies = 
-	{ Enemy(),Enemy(),Enemy(),Enemy(),Enemy() };
+	{ Enemy() };
 
 	while (true)
 	{
 		for (int i = 0; i < enemies.size(); i++)
 		{
-			enemies[i].Update();
+			if (!enemies[i].GetDeleteFlag())
+			{
+				enemies[i].Update();
+			}
 		}
 
 		printf("“Gˆê——\n{\n");
@@ -26,20 +30,11 @@ int main()
 		}
 		printf("}\n\n");
 
-		printf("“|‚µ‚½‚¢“G‚Ì”Ô†‚ð“ü—Í‚µ‚Ä‚­‚¾‚³‚¢\n");
+		string getSelect;
+		printf("\n[ENTER] : ŽŸ‚Ìƒ^[ƒ“\n");
 
-		int target = 0;
-		scanf_s("%d", &target);
-
-		if (target >= 0 && target < enemies.size())
-		{
-			enemies[target].Defeat();
-			printf("\n“G%d‚ð“|‚µ‚Ü‚µ‚½\n\n", target);
-		}
-		else
-		{
-			printf("\n“G%d‚ªŒ©‚Â‚©‚è‚Ü‚¹‚ñ‚Å‚µ‚½\n\n", target);
-		}
+		cin.clear();
+		getline(cin, getSelect);
 	}
 
 	return 0;
