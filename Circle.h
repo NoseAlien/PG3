@@ -4,5 +4,6 @@
 
 class Circle : public IShape
 {
+public:
 	void draw();
 };

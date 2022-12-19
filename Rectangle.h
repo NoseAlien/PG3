@@ -4,5 +4,6 @@
 
 class Rectangle : public IShape
 {
+public:
 	void draw();
 };
